@@ -16,6 +16,11 @@ export type CountryDetails = {
   cca3: string;
 };
 
+export type BroderCountries = {
+  name: string;
+  code: string;
+};
+
 export interface CountryInfoProps {
   name: {
     common: string;
@@ -32,7 +37,7 @@ export interface CountryInfoProps {
     currencies: string;
     languages: string;
   } | null;
-  borderCountries: string[];
+  borderCountries: BroderCountries[];
 }
 
 export interface FilterByRegionProps {

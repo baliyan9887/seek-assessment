@@ -1,9 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import { CountryInfoProps } from "../../types";
 const CountryInfo: React.FC<CountryInfoProps> = ({
   name,
   countryInfo,
   borderCountries,
 }) => {
+  const navigate = useNavigate();
+
+  const navigateToDetails = (code: string) => {
+    navigate(`/details/${code}`);
+  };
+
   if (!countryInfo) return null;
 
   return (
@@ -51,10 +58,16 @@ const CountryInfo: React.FC<CountryInfoProps> = ({
       </div>
       <div className="mt-7 flex flex-col lg:flex-row gap-3">
         <b className="text-black dark:text-white">Border Countries: </b>
-        <div className="flex flex-wrap gap-4 bg-secondaryLightBg dark:bg-secondaryDarkBg text-black dark:text-white  p-1 px-3 rounded-sm">
+        <div className="flex flex-wrap gap-4  text-black dark:text-white  ">
           {borderCountries.length > 0
             ? borderCountries.map((border, index) => (
-                <p key={index}>{border}</p>
+                <p
+                  key={index}
+                  className=" bg-secondaryLightBg dark:bg-secondaryDarkBg p-1 px-3 rounded-sm cursor-pointer"
+                  onClick={() => navigateToDetails(border.code)}
+                >
+                  {border?.name}
+                </p>
               ))
             : "None"}
         </div>

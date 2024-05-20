@@ -5,7 +5,7 @@ function Back() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   return (

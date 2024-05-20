@@ -10,7 +10,7 @@ const useCountryDetails = (id: string) => {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [borderCountries, setBorderCountries] = useState<string[]>([]);
+  const [borderCountries, setBorderCountries] = useState<any[]>([]);
 
   useEffect(() => {
     const loadCountryDetails = async () => {

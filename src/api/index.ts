@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/utils/api.ts
 
 import axios, { AxiosError } from "axios";
@@ -31,34 +32,33 @@ export const fetchCountryDetails = async (code: string): Promise<any> => {
 };
 
 // Fetch the names of border countries
-export const fetchBorderCountries = async (
-  borders: string[]
-  // setBorderCountries: any
-) => {
+export const fetchBorderCountries = async (borders: string[]) => {
   try {
     const responses = await Promise.allSettled(
       borders?.map((border) =>
         fetch(`https://restcountries.com/v3.1/alpha/${border}`)
       )
     );
+
+    console.log("response", responses);
     const borderCountryNames = responses
       .filter((result) => result.status === "fulfilled")
-      .map((result: any) =>
-        result.value.json().then((data: any) => data[0].name.common)
-      );
+      .map((result: any) => result.value.json());
 
     // Wait for all fulfilled promises to resolve
-    const resolvedNames = await Promise.all(borderCountryNames);
+    const countries = await Promise.all(borderCountryNames);
 
-    console.log("res", resolvedNames);
-    return resolvedNames;
-    // const borderCountriesData = await Promise.all(
-    //   responses.map((response) => response.json())
-    // );
-    // const borderCountryNames = borderCountriesData.map(
-    //   (country: any) => country[0].name.common
-    // );
-    // setBorderCountries(resolvedNames);
+    console.log(
+      countries.map((country) => ({
+        code: country[0].cca3, // Assuming country data is in the first index and code is stored under 'cca3'
+        name: country[0].name.common,
+      }))
+    );
+
+    return countries.map((country) => ({
+      code: country[0].cca3, // Assuming country data is in the first index and code is stored under 'cca3'
+      name: country[0].name.common,
+    }));
   } catch (error) {
     console.error("Error fetching border countries:", error);
   }
