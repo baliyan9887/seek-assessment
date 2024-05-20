@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { fetchCountries } from "../../api";
 import CountryCard from "../../components/countryCard";
 import Search from "../../components/search";
 import Filter from "../../components/filter";
 import { CountryDetails } from "../../types";
+import Loader from "../../components/loader";
 
 function Home() {
   const [countries, setCountries] = useState<CountryDetails[]>([]);
@@ -18,8 +19,10 @@ function Home() {
       try {
         const allCountries = await fetchCountries();
         setCountries(allCountries);
-      } catch (error: any) {
-        setError(error?.message || "Unknown error");
+      } catch (error: unknown) {
+        const message =
+          error instanceof Error ? error.message : "Unknown error";
+        setError(message);
       }
       setLoading(false);
     };
@@ -27,37 +30,33 @@ function Home() {
     loadCountries();
   }, []);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(e.target.value);
+    },
+    []
+  );
 
-  const handleRegionChange = (region: string) => {
+  const handleRegionChange = useCallback((region: string) => {
     setSelectedRegion(region);
-  };
+  }, []);
 
-  // Extract and de-duplicate regions from the country list
   const uniqueRegions = useMemo(() => {
     const regions = new Set(countries.map((country) => country.region));
-    return ["All", ...regions]; // Add "All" option to the beginning of the regions array
+    return ["All", ...regions];
   }, [countries]);
 
-  // Filtered countries based on search term and selected region
-  const filteredCountries = useMemo(
-    () =>
-      countries
-        .filter((country) =>
-          country.name.common.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .filter(
-          (country) =>
-            selectedRegion === "All" || country.region === selectedRegion
-        ),
-    [countries, searchTerm, selectedRegion]
-  );
+  const filteredCountries = useMemo(() => {
+    return countries.filter(
+      (country) =>
+        country.name.common.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedRegion === "All" || country.region === selectedRegion)
+    );
+  }, [countries, searchTerm, selectedRegion]);
 
   return (
     <div>
-      <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center mb-12 ">
+      <div className="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center mb-12">
         <Search searchTerm={searchTerm} onSearchChange={handleSearchChange} />
         <Filter
           options={uniqueRegions}
@@ -65,13 +64,13 @@ function Home() {
           onSelectRegion={handleRegionChange}
         />
       </div>
+      {loading && <Loader />}
       {error && <p className="error-message">Error: {error}</p>}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4 xl:gap-15">
-        {filteredCountries.map((country, index) => (
-          <CountryCard key={index} country={country} />
+        {filteredCountries.map((country) => (
+          <CountryCard key={country?.cca3} country={country} />
         ))}
       </div>
-      {loading && <p className="loading-message">Loading...</p>}
     </div>
   );
 }

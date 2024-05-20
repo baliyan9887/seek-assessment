@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { formatIndianNumber } from "../../utils";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function CountryCard({ country }: { country: any }) {
   const navigate = useNavigate();
 

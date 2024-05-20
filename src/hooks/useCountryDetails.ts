@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { fetchBorderCountries, fetchCountryDetails } from "../api";
 import { formatIndianNumber } from "../utils";
@@ -21,7 +22,9 @@ const useCountryDetails = (id: string) => {
           const borderCountryNames = await fetchBorderCountries(
             countryData[0].borders
           );
-          setBorderCountries(borderCountryNames);
+          if (borderCountryNames) {
+            setBorderCountries(borderCountryNames);
+          }
         }
       } catch (error: any) {
         setError(error?.message || "Unknown error");

@@ -13,6 +13,7 @@ export type CountryDetails = {
   languages: { [key: string]: string };
   flags: { png: string };
   borders?: string[];
+  cca3: string;
 };
 
 export interface CountryInfoProps {
