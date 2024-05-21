@@ -5,6 +5,7 @@ import Search from "../../components/search";
 import Filter from "../../components/filter";
 import { CountryDetails } from "../../types";
 import Loader from "../../components/loader";
+import ErrorHandling from "../../components/errorHandling";
 
 function Home() {
   const [countries, setCountries] = useState<CountryDetails[]>([]);
@@ -65,7 +66,7 @@ function Home() {
         />
       </div>
       {loading && <Loader />}
-      {error && <p className="error-message">Error: {error}</p>}
+      {error && <ErrorHandling errorMessage={error} />}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4 xl:gap-15">
         {filteredCountries.map((country) => (
           <CountryCard key={country?.cca3} country={country} />

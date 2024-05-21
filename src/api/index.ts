@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/utils/api.ts
 
 import axios, { AxiosError } from "axios";
 
@@ -12,8 +12,7 @@ export const fetchCountries = async (): Promise<any> => {
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;
-    console.error("Error fetching countries:", axiosError);
-    return []; // Return empty array as fallback
+    throw new Error(axiosError.message || "Failed to fetch countries");
   }
 };
 
@@ -26,8 +25,9 @@ export const fetchCountryDetails = async (code: string): Promise<any> => {
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError;
-    console.error("Error fetching countries:", axiosError);
-    return []; // Return empty array as fallback
+    throw new Error(
+      axiosError.message || `Failed to fetch country details for code: ${code}`
+    ); // Return empty array as fallback
   }
 };
 
@@ -39,8 +39,6 @@ export const fetchBorderCountries = async (borders: string[]) => {
         fetch(`https://restcountries.com/v3.1/alpha/${border}`)
       )
     );
-
-    console.log("response", responses);
     const borderCountryNames = responses
       .filter((result) => result.status === "fulfilled")
       .map((result: any) => result.value.json());
@@ -48,18 +46,11 @@ export const fetchBorderCountries = async (borders: string[]) => {
     // Wait for all fulfilled promises to resolve
     const countries = await Promise.all(borderCountryNames);
 
-    console.log(
-      countries.map((country) => ({
-        code: country[0].cca3, // Assuming country data is in the first index and code is stored under 'cca3'
-        name: country[0].name.common,
-      }))
-    );
-
     return countries.map((country) => ({
       code: country[0].cca3, // Assuming country data is in the first index and code is stored under 'cca3'
       name: country[0].name.common,
     }));
   } catch (error) {
-    console.error("Error fetching border countries:", error);
+    throw new Error("Failed to fetch border countries");
   }
 };

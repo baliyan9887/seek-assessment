@@ -4,6 +4,7 @@ import useCountryDetails from "../../hooks/useCountryDetails";
 import CountryInfo from "../../components/countryInfo";
 import Back from "../../components/back";
 import Loader from "../../components/loader";
+import ErrorHandling from "../../components/errorHandling";
 
 const CountryDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +12,7 @@ const CountryDetailsPage: React.FC = () => {
     useCountryDetails(id ? id : "");
 
   if (loading) return <Loader />;
-  if (error) return <p className="error-message">Error: {error}</p>;
+  if (error) return <ErrorHandling errorMessage={error} />;
 
   return (
     <>

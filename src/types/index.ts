@@ -50,3 +50,12 @@ export interface SearchBarProps {
   searchTerm: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+export interface ThemeToggleProps {
+  darkMode: boolean;
+  toggleTheme: () => void;
+}
+
+export interface ErrorHandlingProps {
+  errorMessage: string;
+}
