@@ -13,7 +13,7 @@ function ErrorHandling({ errorMessage }: ErrorHandlingProps) {
         {errorMessage}
       </p>
       <button
-        className="p-3 px-6 bg-primaryLightBg dark:bg-secondaryDarkBg rounded-lg text-white dark:text-gray-300 font-bold"
+        className="p-3 px-6 bg-secondaryLightBg dark:bg-secondaryDarkBg rounded-lg text-black dark:text-gray-300 font-bold"
         onClick={onTryAgain}
       >
         Try Again
