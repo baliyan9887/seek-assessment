@@ -4,12 +4,12 @@ import { ErrorHandlingProps } from "../../types";
 function ErrorHandling({ errorMessage }: ErrorHandlingProps) {
   const onTryAgain = () => window.location.reload();
   return (
-    <div className="h-[60vh] flex items-center justify-center flex-col gap-8">
+    <div className="h-[80vh] flex items-center justify-center flex-col gap-8 lg:h-[80vh]">
       <ServerCrash
         className="text-black dark:text-white w-[150px]"
         size={100}
       />
-      <p className="text-[50px] dark:text-white text-black font-bold capitalize">
+      <p className="text-[24px] md:text-[30px] lg:text-[50px] dark:text-white text-black font-bold capitalize">
         {errorMessage}
       </p>
       <button
